@@ -17,20 +17,31 @@ def submit():
     print("Username entered :", username.get())
     print("Password entered :", password.get())
     if(user.check_user(username.get(), password.get())):
-        print('u in bitch')
+        print('Logged in.')
+        usernameEntry.delete(0, 'end')
+        passwordEntry.delete(0, 'end')
         mainFrame.pack()
         loginFrame.forget()
+    
+      
     else:
-        print("fuck yourself")
+        print("Try Again.")
 
 
 def generate():
     print("Your password has been generated.")
 
+def register():
+    print("Registered.")
+
+def logout():
+    loginFrame.pack()
+    mainFrame.forget()
+    print("Logged out.")
 
 
 root = tk.Tk()  
-root.geometry('440x640')  
+root.geometry('440x540')  
 root.title('Password Generator')
 root.configure(bg="#192841")
 
@@ -46,13 +57,16 @@ passwordLabel = tk.Label(loginFrame, text="Password", font='Arial 20', bg="#1928
 password = StringVar()
 passwordEntry = tk.Entry(loginFrame, textvariable=password, show="*", font='Arial 15')
 submitButton = tk.Button(loginFrame, text="Login", command=submit, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')  
+registerButton = tk.Button(loginFrame, text="Register", command=register, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
+
 
 titleLabel.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
 usernameLabel.grid(row=1, column=0, pady=10)
 usernameEntry.grid(row=1, column=1)
 passwordLabel.grid(row=2, column=0, pady=10)
 passwordEntry.grid(row=2, column=1)
-submitButton.grid(row=3, column=0, columnspan=2, pady=40)
+submitButton.grid(row=3, column=0, pady=40)
+registerButton.grid(row=3, column=1)
 
 loginFrame.pack()
 
@@ -61,8 +75,10 @@ titleLabel = tk.Label(mainFrame, text="Password Generator", font='Arial 30',bg="
 titleLabel.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
 
 generateButton = tk.Button(mainFrame, text="Generate", command=generate, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
+logoutButton = tk.Button(mainFrame, text="Logout", command=logout,bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
 
-generateButton.grid(row=3, column=0, columnspan=2, pady=40)
+generateButton.grid(row=3, column=0, pady=20)
+logoutButton.grid(row=3, column=1)
 
 
 root.mainloop()
