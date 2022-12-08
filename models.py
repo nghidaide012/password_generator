@@ -19,7 +19,20 @@ class User:
     def get_user_id(self, username):
         self.cur.execute(f"SELECT id FROM Users WHERE username = '{username}'")
         rows = self.cur.fetchall()
-        return rows[0][0]
+        if(rows):
+            return rows[0][0]
+        else:
+            return 0
+    def check_user(self, username, password):
+        if(self.get_user_id(username)):
+            self.cur.execute(f"SELECT password FROM Users WHERE username = '{username}'")
+            rows=self.cur.fetchall()
+            if(rows[0][0] == password):
+                return 1
+            else:
+                return 0
+
+
 
 
 class Password:

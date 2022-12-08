@@ -16,14 +16,17 @@ for i in password.read_user_data(user.get_user_id('testing_user2')):
 def submit():
     print("Username entered :", username.get())
     print("Password entered :", password.get())
+    if(user.check_user(username.get(), password.get())):
+        print('u in bitch')
+        mainFrame.pack()
+        loginFrame.forget()
+    else:
+        print("fuck yourself")
 
-    mainFrame.pack()
-    loginFrame.forget()
-    return
 
 def generate():
     print("Your password has been generated.")
-    return
+
 
 
 root = tk.Tk()  
