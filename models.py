@@ -44,13 +44,14 @@ class Password:
         self.cur.execute("""CREATE TABLE IF NOT EXISTS Passwords(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR(25) UNIQUE,
-            password VARCHAR(255),
+            username VARCHAR(30),
+            password VARCHAR(30),
             user_id INTEGER,
             FOREIGN KEY(user_id) REFERENCES Users(id)
         )
         """)
     def add_password(self, password):
-        self.cur.execute("INSERT OR IGNORE INTO Passwords (name, password, user_id) VALUES (?,?,?)", password)
+        self.cur.execute("INSERT OR IGNORE INTO Passwords (name, username, password, user_id) VALUES (?,?,?,?)", password)
         self.con.commit()
     def read_user_data(self, user):
         self.cur.execute(f"SELECT * FROM Passwords WHERE user_id = (SELECT id FROM Users WHERE id = {user})")
