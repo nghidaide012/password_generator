@@ -28,7 +28,7 @@ def Login():
     else:
         usernameEntry.delete(0, 'end')
         passwordEntry.delete(0, 'end')
-        messagebox.showinfo("login", "Wrong password or username")
+        messagebox.showinfo("Login", "Incorrect password or username")
 def GenerateInput():
     mainFrame.forget()
     GenerateFrame.pack()
@@ -46,13 +46,14 @@ def display():
         for j in range(len(data)-1):
             Lists = Label(mainFrame,width=20, text=data[j], relief='ridge')
             Lists.grid(row=i, column=j, padx=2, pady=5, sticky='s')
-        delBtn = tk.Button(mainFrame, text='delete', command=lambda k=data[0]:del_data(k)).grid(row=i,column=5,padx=2, pady=5, sticky='s')
+        delBtn = tk.Button(mainFrame, text='Delete', command=lambda k=data[0]:del_data(k)).grid(row=i,column=5,padx=2, pady=5, sticky='s')
         upBtn = tk.Button(mainFrame, text='Update', command = lambda k=data[0]:update_data(k)).grid(row=i,column=6,padx=2, pady=5, sticky='s')
         i+=1
-    generateButton = tk.Button(mainFrame, text="Generate", command=GenerateInput, bg="#1da1d1",fg="#FFFFFF")
+    generateButton = tk.Button(mainFrame, text="Generate", command=GenerateInput, bg="#1da1d1",fg="#FFFFFF",font='Arial 20')
     generateButton.grid(row=1000,column=0,pady=20, sticky='s')
-    logoutButton = tk.Button(mainFrame, text="Logout", command=logout,bg="#1da1d1",fg="#FFFFFF")
+    logoutButton = tk.Button(mainFrame, text="Logout", command=logout,bg="#1da1d1",fg="#FFFFFF",font='Arial 20')
     logoutButton.grid(row=1000, column=1, pady=20,sticky='s')
+
 def update_data(id):
     global i
     info = password.get_data(id)
@@ -79,7 +80,7 @@ def update_confirm(data):
             row.grid_forget()
         display()
     else:
-        messagebox.showinfo("not correct length", "all the input length have to be bigger than 4 or smaller than 16")
+        messagebox.showinfo('Incorrect length', "Name and Description must be between greater than 4 and less than 16 characters.")
         for row in mainFrame.grid_slaves():
             row.grid_forget()
         display()
@@ -108,11 +109,11 @@ def generate():
                     row.grid_forget()
                 display()
             else:
-                messagebox.showinfo("Number too large", "the max length is 16, please try again")
+                messagebox.showinfo("Number too large", "Maximum length 16, please try again.")
         except ValueError:
-            messagebox.showinfo("not number", "the Length input suppose to be in number, please try again")
+            messagebox.showinfo("Not a number", "Input requires a number to be entered, try again.")
     else:
-        messagebox.showerror('not enough length', 'name and description have to be more than 4 character and max 16')
+        messagebox.showerror('Incorrect length', 'Name and Description must be between greater than 4 and less than 16 characters.')
 
 def password_generator(length):
   password = ""
@@ -138,10 +139,10 @@ def logout():
 def registerUser():
     if((not len(Reusername.get()) <=4 and not len(Reusername.get()) >16)and (not len(Repassword.get()) <= 4 and not len(Repassword.get()) > 16) and (not len(ReConpassword.get()) <=4 and not len(ReConpassword.get()) > 16)):
         if(user.get_user_id(Reusername.get()) != 0):
-            messagebox.showinfo("existed user", "This user name already exists, please choose another username.")
+            messagebox.showinfo("User exists", "This username already exists, please choose another username.")
         else:
             if(Repassword.get() != ReConpassword.get()):
-                messagebox.showinfo("password", "the password and confirm password are not the same, please check again")
+                messagebox.showinfo("Password", "Password and confirmation password must match.")
             else:
                 user.add_user((Reusername.get(), Repassword.get()))
                 ReusernameEntry.delete(0, 'end')
@@ -150,10 +151,20 @@ def registerUser():
                 loginFrame.pack()
                 registerFrame.forget()
     else:
-        messagebox.showinfo("not enough length", "all the input have to be more than 4 character and max 16")
+        messagebox.showinfo("Incorrect length", "Username and password must be between greater than 4 and less than 16 characters.")
+
+def generateHelp():
+    messagebox.showinfo("Help", "Fill in the desription, name and password length. Minimum of 4 characters and a maximum of 16 characters required per field.")
+
+def registerHelp():
+    messagebox.showinfo("Help", "Fill in the username, password and confirm your password. Minimum of 4 characters and a maximum of 16 characters required per field. Press login if you already have an account.")
+
+def returnLogin():
+    loginFrame.pack()
+    registerFrame.forget()
 
 root = tk.Tk()  
-root.geometry('925x500')  
+root.geometry('925x500') 
 
 root.title('Password Generator')
 root.configure(bg="#192841")
@@ -202,6 +213,9 @@ RepasswordConEntry = tk.Entry(registerFrame, bd=3, show="*", textvariable=ReConp
 
 buttonLabel = tk.Button(registerFrame, text="Register", command=registerUser, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
 
+registerHelpButton = tk.Button(registerFrame, text="Need Help?", command=registerHelp, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
+returnLoginButton = tk.Button(registerFrame, text="Login", command=returnLogin, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
+
 #RegisterGrid
 registerTitle.grid(row=0, column=1, columnspan=4, padx=5, pady=40)
 
@@ -215,7 +229,11 @@ RepasswordConEntry.grid(row=3, column=2, padx=5, pady=5)
 passConLabel.grid(row=3, column=1, padx=5, pady=5, sticky=E)
 
 buttonLabel.grid(row=4, column=1, padx=5, pady=5, columnspan=2, sticky='news')
-#generate frame
+
+registerHelpButton.grid(row=6, column=1, padx=5, pady=5, columnspan=2,sticky='news')
+returnLoginButton.grid(row=5, column=1,padx=5, pady=5, columnspan=2,sticky='news')
+
+#Generate frame
 GenerateTitle = tk.Label(GenerateFrame, text="Password Generator", font='Arial 30',bg="#192841", fg="#FFFFFF")
 
 GeneratedescriptionLabel = tk.Label(GenerateFrame, text='Description', font='Arial 20', bg="#192841", fg="#FFFFFF")
@@ -229,9 +247,9 @@ GeneratelengthLabel = tk.Label(GenerateFrame, text="Length", font='Arial 20', bg
 Gelength = StringVar()
 GeneratelengthEntry = tk.Entry(GenerateFrame, bd=3, textvariable=Gelength)
 
-
 generateSubmitButton = tk.Button(GenerateFrame, text="Generate", command=generate, bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
 
+generateHelpButton = tk.Button(GenerateFrame, text="Need Help?", command=generateHelp,bg="#1da1d1",fg="#FFFFFF", font='Arial 20')
 
 #generate grid
 GenerateTitle.grid(row=0, column=1, columnspan=4, padx=5, pady=40)
@@ -245,7 +263,8 @@ GeneratelengthEntry.grid(row=3, column=2, padx=5, pady=5)
 GeneratedescriptionLabel.grid(row=1, column=1, padx=5, pady=5, sticky=E)
 GeneratedescriptionEntry.grid(row=1, column=2, padx=5, pady=5)
 
-generateSubmitButton.grid(row=4, column=1, padx=5,pady=(20,5), columnspan=4, sticky= EW)
+generateSubmitButton.grid(row=4, column=1, padx=5,pady=(20,5), sticky= EW)
+generateHelpButton.grid(row=4, column=2, padx=5,pady=(20,5), sticky= EW)
 #main
 
 
