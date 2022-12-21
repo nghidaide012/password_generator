@@ -57,3 +57,6 @@ class Password:
         self.cur.execute(f"SELECT * FROM Passwords WHERE user_id = (SELECT id FROM Users WHERE id = {user})")
         rows = self.cur.fetchall()
         return rows
+    def delete_data(self, id):
+        self.cur.execute(f"DELETE FROM Passwords WHERE id = '{id}'")
+        self.con.commit()

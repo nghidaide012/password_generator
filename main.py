@@ -41,17 +41,22 @@ def display():
     header_des = Label(mainFrame, text='Description',bg="#192841", fg="#FFFFFF").grid(row=0, column=1)
     header_user = Label(mainFrame, text='Username', bg="#192841", fg="#FFFFFF").grid(row=0, column=2)
     header_pass = Label(mainFrame, text='Password', bg="#192841", fg="#FFFFFF").grid(row=0, column=3)
-    for test in password.read_user_data(loggedInUser):
-        for j in range(len(test)-1):
-            Lists = Label(mainFrame,width=20, text=test[j], relief='ridge')
+    for data in password.read_user_data(loggedInUser):
+        for j in range(len(data)-1):
+            Lists = Label(mainFrame,width=20, text=data[j], relief='ridge')
             Lists.grid(row=i, column=j, padx=2, pady=5, sticky='s')
+        delBtn = tk.Button(mainFrame, text='delete', command=lambda k=data[0]:del_data(k)).grid(row=i,column=5,padx=2, pady=5, sticky='s')
         i+=1
     generateButton = tk.Button(mainFrame, text="Generate", command=GenerateInput, bg="#1da1d1",fg="#FFFFFF")
     generateButton.grid(row=1000,column=0,pady=20, sticky='s')
     logoutButton = tk.Button(mainFrame, text="Logout", command=logout,bg="#1da1d1",fg="#FFFFFF")
     logoutButton.grid(row=1000, column=1, pady=20,sticky='s')
 
-
+def del_data(id):
+    password.delete_data(id)
+    for row in mainFrame.grid_slaves():
+        row.grid_forget()
+    display()
 
 def generate():
     if((len(Gename.get()) > 4 and len(Gename.get()) <= 16) and (len(Gedescription.get()) > 4 and len(Gedescription.get()) <= 16)):
