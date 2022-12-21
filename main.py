@@ -7,9 +7,9 @@ import random, string
 user = User()
 password = Password()
 loggedInUser = None
+global i
 # user.add_user(('testing_user', 'randompassword'))
 # user.add_user(('testing_user2', 'randompassword'))
-
 # for i in password.read_user_data(user.get_user_id('testing_user2')):
 #     for j in i:
 #         print(j)
@@ -36,6 +36,7 @@ def GenerateInput():
 
 
 def display():
+    global i
     i = 1
     header_id = Label(mainFrame, text='id', bg="#192841", fg="#FFFFFF").grid(row=0, column=0)
     header_des = Label(mainFrame, text='Description',bg="#192841", fg="#FFFFFF").grid(row=0, column=1)
@@ -46,13 +47,46 @@ def display():
             Lists = Label(mainFrame,width=20, text=data[j], relief='ridge')
             Lists.grid(row=i, column=j, padx=2, pady=5, sticky='s')
         delBtn = tk.Button(mainFrame, text='delete', command=lambda k=data[0]:del_data(k)).grid(row=i,column=5,padx=2, pady=5, sticky='s')
+        upBtn = tk.Button(mainFrame, text='Update', command = lambda k=data[0]:update_data(k)).grid(row=i,column=6,padx=2, pady=5, sticky='s')
         i+=1
     generateButton = tk.Button(mainFrame, text="Generate", command=GenerateInput, bg="#1da1d1",fg="#FFFFFF")
     generateButton.grid(row=1000,column=0,pady=20, sticky='s')
     logoutButton = tk.Button(mainFrame, text="Logout", command=logout,bg="#1da1d1",fg="#FFFFFF")
     logoutButton.grid(row=1000, column=1, pady=20,sticky='s')
+def update_data(id):
+    global i
+    info = password.get_data(id)
+    str_id = StringVar()
+    str_des = StringVar()
+    str_user = StringVar()
+    str_pass = StringVar()
+    str_id.set(info[0])
+    str_des.set(info[1])
+    str_user.set(info[2])
+    str_pass.set(info[3])
+
+    id_entry = tk.Entry(mainFrame, textvariable=str_id, state='disabled', relief='ridge', justify='center').grid(row=i, column=0, padx=2, pady=5)
+    id_entry = tk.Entry(mainFrame, textvariable=str_des, relief='ridge', justify='center').grid(row=i, column=1, padx=2, pady=5)
+    id_entry = tk.Entry(mainFrame, textvariable=str_user, relief='ridge', justify='center').grid(row=i, column=2, padx=2, pady=5)
+    id_entry = tk.Entry(mainFrame, textvariable=str_pass, relief='ridge', justify='center').grid(row=i, column=3, padx=2, pady=5)
+    updateBtn = tk.Button(mainFrame, text='Update', command=lambda: update_confirm((str_des.get(), str_user.get(), str_pass.get(), str_id.get()))).grid(row=i, column=4, padx=2, pady=5)
+
+
+def update_confirm(data):
+    if((len(data[0]) > 4 and len(data[0]) <= 16) and (len(data[1]) > 4 and len(data[1]) <= 16) and (len(data[2]) > 4 and len(data[2]) <= 16)):
+        password.update_data(data)
+        for row in mainFrame.grid_slaves():
+            row.grid_forget()
+        display()
+    else:
+        messagebox.showinfo("not correct length", "all the input length have to be bigger than 4 or smaller than 16")
+        for row in mainFrame.grid_slaves():
+            row.grid_forget()
+        display()
+
 
 def del_data(id):
+
     password.delete_data(id)
     for row in mainFrame.grid_slaves():
         row.grid_forget()

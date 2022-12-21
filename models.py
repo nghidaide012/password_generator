@@ -60,3 +60,10 @@ class Password:
     def delete_data(self, id):
         self.cur.execute(f"DELETE FROM Passwords WHERE id = '{id}'")
         self.con.commit()
+    def update_data(self, data):
+        self.cur.execute(f"UPDATE Passwords SET name = ?, username = ?, password = ? WHERE id = ?", data)
+        self.con.commit()
+    def get_data(self, id):
+        self.cur.execute(f"SELECT * FROM Passwords WHERE id = '{id}'")
+        rows = self.cur.fetchall()
+        return rows[0]
